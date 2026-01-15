@@ -1,5 +1,5 @@
 const { HfInference } = require('@huggingface/inference');
-const hf = new HfInference('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'); // Replace with your API key
+const hf = new HfInference(''); // Replace with your API key
 
 const testHuggingFace = async () => {
   try {
