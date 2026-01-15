@@ -1,6 +1,6 @@
 const express = require("express");
-const { connectDB } = require("../lib/db");
-const recipeRoutes = require("../routes/recipeRoutes");
+const { connectDB } = require("../../lib/db");
+const recipeRoutes = require("../../routes/recipeRoutes");
 
 const app = express();
 app.use(express.json());
@@ -14,10 +14,8 @@ async function initDB() {
   }
 }
 
-// mount routes
 app.use("/", recipeRoutes);
 
-// Vercel-compatible handler
 module.exports = async (req, res) => {
   await initDB();
   return app(req, res);
