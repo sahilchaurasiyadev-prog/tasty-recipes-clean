@@ -1,15 +1,17 @@
-import express from "express";
-import { connectDB } from "../lib/db.js";
-import recipeRoutes from "../routes/recipeRoutes.js";
+const express = require("express");
+const { connectDB } = require("../lib/db");
+const recipeRoutes = require("../routes/recipeRoutes");
 
 const app = express();
 app.use(express.json());
 
-// connect to MongoDB (serverless-safe)
-await connectDB();
+// connect to MongoDB (no top-level await)
+connectDB().catch(err => {
+  console.error("MongoDB connection failed:", err);
+});
 
-// mount existing Express routes
+// mount existing routes
 app.use("/", recipeRoutes);
 
-// export as Vercel serverless function
-export default app;
+// export for Vercel
+module.exports = app;
