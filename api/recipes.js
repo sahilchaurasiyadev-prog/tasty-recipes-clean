@@ -5,13 +5,20 @@ const recipeRoutes = require("../routes/recipeRoutes");
 const app = express();
 app.use(express.json());
 
-// connect to MongoDB (no top-level await)
-connectDB().catch(err => {
-  console.error("MongoDB connection failed:", err);
-});
+let isConnected = false;
 
-// mount existing routes
+async function initDB() {
+  if (!isConnected) {
+    await connectDB();
+    isConnected = true;
+  }
+}
+
+// mount routes
 app.use("/", recipeRoutes);
 
-// export for Vercel
-module.exports = app;
+// Vercel-compatible handler
+module.exports = async (req, res) => {
+  await initDB();
+  return app(req, res);
+};
